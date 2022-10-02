@@ -86,3 +86,41 @@ func fileserver(root FileSystem) Handler
 // func(d dir)Open(name string)(File,error)
 
 ```
+
+## HTTP 消息
+
+HTTP Request 和 HTTP Response（请求和响应）具有相同的结构：
+
+- 请求/响应行
+
+- 0 个或多个 Header
+
+- 空行
+
+- 可选的消息体（Body）
+
+> 例子：
+> 
+> GET /Protocols/rfc2616.html HTTP/1.1 <-请求类型 URL HTTP 协议版本
+> 
+> HOST: www.w3.org
+> 
+> User-Agent: Mozilla/5.0
+> 
+> (空行)
+
+Request（是个 struct），代表了客户端发送的 HTTP 请求消息
+
+> 重要的字段：
+> 
+> - URL
+> 
+> - Header
+> 
+> - Body
+> 
+> - Form、PostForm、MultipartForm
+> 
+> 也可以通过 Request 的方法访问请求中的 Cookie、URL、User Agent 等信息
+> 
+> Request 既代表发送到服务端的请求，又可代表客户端发出的请求
