@@ -52,3 +52,37 @@ server := http.Server{
 // 将 Handler 附加到 DefaultServeMux
 http.Handle("/hello", &mh) // 注意，http.Handle 需要的是 Handler 指针
 ```
+
+## 内置的 Handler
+
+```go
+// go 语言内置的5个handler  NOTFoundHandler  redirectHandler stripPrefixHandler  TimeoutHandle fileserver
+
+func NOTFoundHandler() Handler
+// 返回一个handler， 它给的每个请求的响应都是"404 page not found"
+
+func RedirectHandler(url string ,code int) Handler {}
+// 返回一个 handler 它的每个请求使用给定的状态码跳转到指定的 URL
+ // URL 要跳转的 URL code 跳转的状态码（3xx）常见的 statusMovedPermanentrly statusFound statusseeother
+
+ func StripPrefixHandler(prefix string, h handler) handler
+ // 返回一个 handler 它从请求 URL 中去掉指定的前缀 然后再调用另一个 handler
+ // 如果请求 URL 与提供的前缀不符合 那么 404
+ // 有点像中间件 prefix URL 将要被移除的字符串前缀
+ // h 是一个 handler 在移除字符串前缀之后 handler 将会接受到请求
+
+func TimeoutHandler(h handler, dt time.Duration, msg string){
+// 返回一个 handler 他用来在指定时间内运行传入的 h
+// h 将要被修饰的handler
+// dt 第一个 handler 允许的处理时间
+// msg 如果超时那么就把 msg 返回给请求表示响应时间过长
+
+func fileserver(root FileSystem) Handler
+// 返回一个 handler 基于root的文件系统来响应请求
+// type FileSystem struct{
+// 	Open (name string)(File,error)
+// }
+// 使用时需要到操作系统的文件系统，所以还需要委托给 type dir string
+// func(d dir)Open(name string)(File,error)
+
+```
