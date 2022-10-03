@@ -316,3 +316,26 @@ func process(w http.ResponseWriter, r *http.Request) {
 </body>
 </html>
 ```
+
+## 路由
+
+目前我们的情况：
+
+```go
+func main() {
+    http.HandleFunc("/...", func (w http.ResponseWriter, r *http.Request) {...})
+    http.HandleFunc("/...", func (w http.ResponseWriter, r *http.Request) {...})
+    http.HandleFunc("/...", func (w http.ResponseWriter, r *http.Request) {...})
+    http.ListenAndServe()
+}
+```
+
+是将多个不同类型的请求的处理都放在了main函数，这样显然是不合适的
+
+- Controller 的角色
+
+> 静态资源
+> 
+> 把不同的请求送到不同的 Controller 进行处理
+
+![routes](./routes.png)
