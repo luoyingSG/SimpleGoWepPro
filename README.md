@@ -248,6 +248,71 @@ func process(w http.ResponseWriter, r *http.Request) {
 如果该方法没有显式调用，那么在第一次调用 Write 方法前，会隐式
 的调用 `WriteHeader(http.StatusOK)`
 
+## 模版
+
+![模版与模版引擎](./template_intro.png)
+
+- 两种理想的模版引擎
+
+无逻辑模版引擎
+
+> 通过占位符，动态数据被替换到模板中
+> 
+> 不做任何逻辑处理，只做字符串替换
+> 
+> 处理完全由 handler 来完成
+> 
+> 目标是展示层和逻辑的完全分离
+
+逻辑嵌入模板引擎
+
+> 编程语言被嵌入到模板中
+> 
+> 在运行时由模板引擎来执行，也包含替换功能
+> 
+> 功能强大
+> 
+> 逻辑代码遍布 handler 和模板，难以维护
+
+- Go 模版引擎工作原理
+
+![模板引擎](./template_engine.png)
+
+> 在 Web 应用中，通产是由 handler 来触发模板引擎
+> handler调用模板引擎，并将使用的模板传递给引擎
+> 通常是一组模板文件和动态数据模板引擎生成 HTML ,并将其写入 ResponseWriter
+> ResponseWriter 再将它加入到 HTTP 响应中，返回给客户端
+
+- 使用模板引擎
+
+```go
+func main() {
+    server := http.Server{
+        Addr: "localhost:8080"
+    }
+    http.HandleFunc("/process", process)
+    server.ListenAndServe()
+}
 
 
-- 
+func process(w http.ResponseWriter, r *http.Request) {
+    t, _ := template.ParseFiles("tmpl.html")
+    t.Execute(w, "Hello, world!")
+}
+```
+
+模版：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Go Web Programming</title>
+</head>
+<body>
+    <!-- 占位符，带回会被 t.Execute() 传入的内容替代 -->
+    {{ . }}
+</body>
+</html>
+```
