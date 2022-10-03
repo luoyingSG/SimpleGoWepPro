@@ -228,3 +228,26 @@ func process(w http.ResponseWriter, r *http.Request) {
 	}
 }
 ```
+
+## ReponseWriter
+
+> Q：为什么 Handler 中的 ServeHTTP(w ResponseWriter, r *Request) 只有一个是指针类型？w 是按值传递的吗？
+> 
+> A：ResponseWriter 实质上也是一个指针
+
+- 写入到 ResponseWriter
+
+`Write()` 接收一个 byte 切片作为参数，会把它写入到 HTTP 响应的 Body 里面
+
+如果在 `Write()` 被调用前，header 里面没有设定 Content-Type，那么数据的前 512 个字节就会被用来检测 Content-Type
+
+
+
+`WriteHeader()` 接收一个整数类型（HTTP状态码）作为参数，并
+把它作为 HTTP 响应的状态码返回
+如果该方法没有显式调用，那么在第一次调用 Write 方法前，会隐式
+的调用 `WriteHeader(http.StatusOK)`
+
+
+
+- 
