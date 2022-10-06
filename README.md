@@ -339,3 +339,47 @@ func main() {
 > 把不同的请求送到不同的 Controller 进行处理
 
 ![routes](./routes.png)
+
+## JSON
+
+- 读取 JSON
+
+需要一个解码器，如 `dec := json.NewDecoder(r.Body)`，其参数需要实现 Reader 接口
+
+在解码器上进行解码：`dec.Decode(&query)`
+
+- 写入 JSON
+
+需要一个编码器：`enc := json.NewEncoder(w)`，其参数需要实现 Writer 接口
+
+编码：`enc.Encode(results)`
+
+## 中间件
+
+```go
+func listenAndServe(addr string, handler Handler) error
+```
+
+可以将自己的中间件作为第二个参数传入
+
+- 创建中间件：
+
+```go
+// 要创建中间件，就必须使它实现 Handler 接口
+type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)
+}
+
+
+// 创建中间件
+type MyMiddleware struct {
+    Next http.Handler
+}
+
+
+func (m MyMiddleware) ServeHTTP(w http.ResponseWriter, r *Request) {
+    // 在 next handler 之前做一些事情
+    m.Next.ServeHTTP(w, r)
+    // 在 next handler 之后做一些事情
+}
+```
