@@ -383,3 +383,28 @@ func (m MyMiddleware) ServeHTTP(w http.ResponseWriter, r *Request) {
     // 在 next handler 之后做一些事情
 }
 ```
+
+## 请求上下文
+
+```go
+// 返回当前请求的上下文
+func (*Request) Context() context.Context
+// 基于 Context 进行“修改”，（实际上）创建一个新的 Context
+func (*Request) WithContext(ctx context.Context) context.Context
+
+
+// context.Context 
+// 这些方法都是用于读取，不能进行设置
+type Context interface {
+    Deadline()(deadline time.Time, ok bool)
+    Done() <- chan struct{}
+    Err() error
+    Value(key interface{}) interface{}
+}
+
+// 返回新的 Context
+WithCancel()
+WithDeadline()
+WithTimeout()
+WithValue() // 在原有的 Context 里添加一些值
+```
