@@ -1,6 +1,7 @@
 # SimpleGoWepPro
 
 A simple go web project
+这个项目是B站杨旭大佬（个人首页：https://space.bilibili.com/361469957?spm_id_from=333.337.0.0）的 Go.lang Web 课程的笔记
 
 ## Handler
 
